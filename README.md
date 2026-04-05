@@ -1,17 +1,48 @@
-# Web Pixel Sandbox Builder Skill
+# Web Pixel Sandbox Builder
 
-A reusable Codex skill for turning webpage links, screenshots, or broken HTML sandboxes into usable offline HTML prototypes.
+Turn a webpage link or screenshot into a usable offline HTML sandbox.
 
-This skill focuses on engineering-grade UI reconstruction:
+This repository provides a Codex skill designed for **pixel-level UI reconstruction**.
 
-- analyze structure before styling
-- clarify user intent in plain language
-- lock scope before editing
-- prefer safe patches over full rewrites
-- generate a usable offline HTML sandbox
+It helps AI agents analyze webpage structure, clarify intent, and generate a stable HTML sandbox that can be edited locally.
 
-Main skill file:
-skills/web-pixel-sandbox-builder/SKILL.md
+---
 
-Repository editing rules:
-AGENTS.md
+## What this skill solves
+
+Recreating webpages from screenshots or broken HTML often fails because:
+
+- layout hierarchy is unclear
+- sticky / fixed regions are misinterpreted
+- overlays and masks break scrolling
+- AI rewrites the entire file instead of patching
+
+This skill enforces an engineering workflow:
+
+1. analyze structure before styling  
+2. identify sticky / fixed regions  
+3. clarify user intent in plain language  
+4. patch instead of rewriting  
+5. generate a stable offline HTML sandbox  
+
+---
+
+## Example workflow
+
+Input:
+
+- webpage link
+- screenshot
+- partial UI reference
+
+The skill will:
+
+1. analyze page structure
+2. ask minimal clarification questions
+3. lock module boundaries
+4. generate an offline HTML sandbox
+5. allow safe iterative patches
+
+---
+
+## Repository structure
