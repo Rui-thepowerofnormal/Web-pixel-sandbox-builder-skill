@@ -1,149 +1,352 @@
----
-name: web-pixel-sandbox-builder
-description: Turn a webpage link, screenshot, or partial UI reference into a usable offline HTML sandbox through structure-first analysis, intent clarification, and minimal-risk engineering patches.
----
+Web Pixel Sandbox Builder
+Purpose
 
-# Web Pixel Sandbox Builder
+Use this skill when the user wants to recreate, approximate, or iteratively refine a webpage or product UI as an offline HTML sandbox.
 
-## Purpose
+This skill operates in engineering reconstruction mode, not mockup mode.
 
-Use this skill when the user wants to recreate, approximate, or iteratively refine a webpage or product UI as an offline HTML file.
+The goal is to produce a usable single-file HTML sandbox that:
 
-This skill is for engineering-grade UI reconstruction, not casual mockups. The goal is to produce a usable local HTML sandbox that can be opened offline, patched safely, and iterated over without repeatedly rewriting the whole page.
+opens offline
+preserves stable structure
+can be safely patched
+allows iterative UI refinement without rewriting the entire page
 
-## When to use
+The sandbox should behave like a product UI environment, not a static screenshot replica.
+
+When to use
 
 Use this skill when the user provides any of the following:
 
-- a webpage link
-- a full-page screenshot
-- partial screenshots of UI regions
-- an existing HTML file that needs restoration or refinement
-- a broken sandbox version plus a visual target
+a webpage link
+a full-page screenshot
+partial screenshots of UI regions
+an existing HTML sandbox that needs restoration
+a broken sandbox plus a visual target
+a UI reference that needs to become an editable HTML environment
 
-Use this skill especially when the task requires:
+Typical use cases include:
 
-- pixel-level layout reconstruction
-- fixed / sticky region analysis
-- overlay / drawer / mask / slab behavior
-- internal scrolling tables
-- preserving already-approved modules while patching only broken areas
-- generating a single-file offline HTML deliverable
+pixel-level layout reconstruction
+recreating dashboards
+restoring broken sandbox files
+UI iteration without breaking stable modules
+engineering reconstruction from visual references
+Operating mode
 
-## Operating mode
+Work in engineering delivery mode, not conversational exploration.
 
-Work in engineering delivery mode, not chatty iteration mode.
+Always follow the structured reconstruction pipeline.
 
-Always follow this sequence:
+Never jump directly to code generation.
 
-1. Analyze the current artifact and the visual reference completely before proposing code.
-2. Identify the full problem set, including structure, layout, masking, scrolling, and interaction relationships.
-3. Ask only the minimum necessary clarification questions in plain language.
-4. Lock the scope: identify which modules are allowed to change and which are frozen.
-5. Prefer the smallest safe patch over full-file rewrites.
-6. Output a single final solution, not multiple speculative versions.
-7. If a stable version is reached, recommend creating a snapshot copy before further edits.
+Always complete structural reasoning before proposing implementation.
 
-## Core principles
+The correct workflow is:
 
-- Structure before styling.
-- Layout before color.
-- Layering before spacing.
-- Masking and stickiness are structural problems, not cosmetic ones.
-- Screenshots are the visual source of truth when they conflict with model assumptions.
-- Treat already-approved modules as locked unless the user explicitly allows changes.
-- If the task is complex or ambiguous, plan first before editing.
-- Do not rewrite the full file unless there is no safe patch path.
+Reference input
+↓
+Interaction-first visual parsing
+↓
+Visual interaction tree
+↓
+Clarification and interaction contract
+↓
+Layout skeleton
+↓
+Engineering reconstruction
+↓
+Minimal safe patch or full sandbox output
+Core principles
 
-## Input handling
+Structure before styling.
 
-If the user provides both screenshots and an existing HTML file:
+Layout before color.
 
-- treat the HTML file as the current baseline
-- treat the screenshots as the visual truth
+Layering before spacing.
 
-If the user provides only screenshots or links:
+Masking and stickiness are structural problems, not cosmetic ones.
 
-- first generate a stable structural skeleton
-- then refine toward visual accuracy
+Screenshots are the visual source of truth when they conflict with model assumptions.
 
-If sensitive names or identifiers appear in the source material:
+Approved modules must be treated as locked unless the user explicitly allows modification.
 
-- replace them with neutral demo placeholders
-- preserve layout realism while anonymizing content
+Prefer minimal safe patches over full-file rewrites.
 
-## Analysis framework
+Never generate speculative alternative versions.
 
-For every task, identify the following before making changes:
+Always produce one stable engineering result.
 
-- global page frame and content width
-- fixed vs sticky vs scrollable regions
-- whether top rows act as true reserved layout space or only visual overlays
-- left / right column proportions
-- whether tables should expand the page or scroll internally
-- whether floating elements belong to the page, a module, or an overlay
-- whether a problem is caused by color, spacing, z-index, overflow, position, grid, or DOM hierarchy
+Input handling
+If the user provides both screenshots and HTML
 
-Do not assume a universal page module structure. Infer the structure from the provided artifact.
+Treat the HTML file as the current baseline.
 
-## Clarification rules
+Treat the screenshots as the visual source of truth.
 
-Ask only if the answer cannot be safely inferred from the provided references or current file.
+The HTML must be patched to match the screenshots.
 
-When asking, use plain language.
+If the user provides only screenshots or links
+
+First reconstruct a stable interaction structure.
+
+Then build a structural HTML skeleton.
+
+Only then refine visual accuracy.
+
+If sensitive identifiers appear
+
+Replace them with neutral placeholders while preserving layout realism.
+
+Step 1 — Artifact inspection
+
+Before proposing any structure or code:
+
+Inspect the provided reference completely.
+
+Identify:
+
+page frame
+visible modules
+interaction zones
+scroll containers
+overlays
+tables and charts
+navigation structures
+
+Do not assume any layout patterns at this stage.
+
+Step 2 — Interaction-first structural analysis
+
+This step replaces traditional layout inference.
+
+Before making any engineering decision, the model must first reconstruct the visual interaction structure of the page.
+
+This step is mandatory.
+
+No HTML generation is allowed before completing it.
+
+Visual truth rule
+
+During this stage:
+
+Do NOT rely on historical UI patterns.
+
+Do NOT assume common layouts.
+
+Do NOT infer frameworks.
+
+Do NOT reuse prior examples.
+
+Only use direct visual evidence from the provided screenshots or webpage.
+
+If the structure cannot be determined visually, mark uncertainty instead of guessing.
+
+Generate a visual interaction tree
+
+The model must produce a tree-style interaction map representing the visible UI structure.
+
+Example format:
+
+app
+ ├─ topbar
+ ├─ drawer
+ └─ main.page
+      └─ page-inner
+           └─ page-shell
+                ├─ frozen header area
+                │    ├─ page-header-row
+                │    └─ left-fixed-group
+                │
+                └─ right-scroll-group
+                     ├─ shop-header
+                     ├─ overview
+                     │    ├─ KPI grid
+                     │    └─ chart
+                     └─ campaigns
+                          ├─ tabs
+                          ├─ filters
+                          └─ campaign-table
+
+This tree represents the visual interaction skeleton, not the final HTML structure.
+
+Structural categories to identify
+
+When generating the tree, identify:
+
+global page frame
+navigation areas
+fixed UI regions
+frozen header zones
+scroll containers
+interaction modules
+data containers
+chart areas
+table containers
+filter panels
+drawers or overlays
+
+Only include elements that are visually observable.
+
+Handling uncertainty
+
+If any region cannot be reliably determined:
+
+Mark the node as uncertain.
+
+Example:
+
+main.page
+ ├─ overview
+ └─ campaigns
+      └─ table-container (?) 
+
+The model must not invent structure.
+
+Pause rule
+
+If the interaction tree is unstable or ambiguous:
+
+Pause and ask clarification questions before continuing.
+
+Do not proceed to layout engineering.
+
+Step 3 — Clarification and interaction contract
+
+Once the interaction tree is created:
+
+Ask the minimum number of clarification questions needed to resolve structural uncertainty.
+
+Questions must be written in plain language.
 
 Good example:
-- Should the left title and the white module stay fixed together as one block?
+
+Should the page header stay fixed when the campaign table scrolls?
 
 Bad example:
-- Should the container be sticky or fixed?
 
-Limit clarifications to the fewest questions necessary to unblock engineering decisions.
+Should the container use sticky positioning?
 
-## Editing rules
+Interaction contract
 
-When editing an existing file:
+After clarification, define the interaction contract:
 
-- read the full current file first
-- identify exact broken regions
-- patch only the affected CSS / HTML / JS blocks when possible
-- preserve working IDs, class hooks, and existing interactions unless the user allows structural refactoring
-- after editing, report exact changed line ranges and a one-sentence summary per changed block
+Identify:
 
-When the file is badly corrupted:
-- explain why full replacement is safer than patching
-- then generate one full replacement artifact
+fixed regions
+scroll regions
+overlay behaviors
+module boundaries
+interaction granularity required for the sandbox
 
-## Output requirements
+This determines what the sandbox must support.
 
-The final output should be one of the following:
+Step 4 — Layout skeleton
 
-- a single-file offline HTML document
-- a minimal patch with exact replacement ranges
-- a Codex-ready engineering prompt that tells Codex exactly what to inspect, modify, preserve, and save
+Only after the interaction contract is defined:
 
-If outputting instructions for Codex, require:
+Construct the layout skeleton.
 
-- use current file as source of truth
-- read before editing
-- write directly into the file
-- save in place
-- report changed line ranges only
+This skeleton defines:
 
-## Snapshot discipline
+major containers
+scroll hierarchy
+fixed zones
+layout grouping
 
-Once the user confirms a version is good:
+Still avoid styling.
 
-- recommend creating a snapshot copy
-- continue future edits from the main file, not the snapshot
-- keep the snapshot untouched as a restore point
+Focus only on structural layout.
 
-## Success criteria
+Step 5 — Engineering reconstruction
 
-A successful run of this skill produces a sandbox that is:
+Now convert the layout skeleton into implementation.
 
-- visually faithful to the provided reference
-- structurally stable
-- editable with small patches
-- usable offline
-- safe to evolve without repeatedly breaking already-approved modules
+Choose stable layout methods.
+
+Possible layout systems include:
+
+flex
+grid
+container stacking
+scroll containers
+sticky positioning
+overflow isolation
+
+But only after structure is finalized.
+
+Editing rules
+
+When editing an existing sandbox file:
+
+Read the full file before editing.
+Identify broken regions.
+Patch only the necessary blocks.
+Preserve working IDs and class hooks.
+Do not remove existing interaction behavior unless necessary.
+Minimal patch preference
+
+Prefer modifying:
+
+CSS rules
+layout containers
+specific DOM blocks
+
+Avoid rewriting the entire file unless absolutely required.
+
+Full replacement rule
+
+If the file is structurally corrupted:
+
+Explain why patching is unsafe.
+
+Then generate a full replacement sandbox.
+
+Output requirements
+
+The final output must be one of the following:
+
+Single-file sandbox
+
+A complete offline HTML file.
+
+Minimal patch
+
+Provide exact replacement ranges.
+
+Explain each modification briefly.
+
+Codex-ready engineering instruction
+
+If the user is editing locally, provide a precise instruction block telling Codex:
+
+read current file
+modify only specified blocks
+preserve working modules
+save changes in place
+report changed line ranges
+Snapshot discipline
+
+Once the user confirms a version is stable:
+
+Recommend creating a snapshot copy.
+
+The snapshot must remain untouched.
+
+All future edits should continue from the main working file.
+
+Success criteria
+
+A successful sandbox must be:
+
+Visually faithful to the reference.
+
+Structurally stable.
+
+Patchable with small changes.
+
+Editable without breaking approved modules.
+
+Usable as a local offline environment.
+
+Safe for iterative UI engineering.
